@@ -1,9 +1,9 @@
 # Causal Expectation-Maximisation
 
-This bundle contains the manuscript submitted to Neurips 2021 and entitled  "Causal Expectation-Maximisation". 
+This bundle contains the manuscript preseted at the WHY workshop (NeurIPS2021) and entitled  "Causal Expectation-Maximisation". 
 The organisation  is the following:
 
-- _example_: code and data for replicating the example in the supplementary material.
+- _example_: code and data for replicating the examples in the paper.
 - _experiments_: Java files for replicating the experiments.
 - _lib_: packages needed for running the code.
 - _models_: set of structural causal models in UAI format considered in the experimentation.
@@ -27,19 +27,19 @@ OpenJDK 64-Bit Server VM (build 12.0.1+12, mixed mode, sharing)
 ```
 
 
-## Running CEM
+## Running EMCC
 
 The experiments provided in the paper can be replicated with the code in `experiments/RunCEM.java` which
 will require the functionality at `lib/causalem.jar`. Basically, this JAR package contains the code
 in the sources folder together with the third party dependencies. 
 
 
-The beforehand mentioned java file allows to compute the _probability of necessity and sufficiency (PNS)_ using CEM.
+The beforehand mentioned java file allows to compute the _probability of necessity and sufficiency (PNS)_ using EMCC.
 It takes as input a SCM and a dataset. If the later is not specified, the data will be sampled from the model, which shoul
 be fully-specified in that case (with the marginals over the exogenous variables). For a further description of how to run this code, we can simply run the help menu as follows. 
 
 ```
-java -cp lib/causalem.jar experiments/RunCEM.java --help
+java -cp lib/causalem.jar experiments/RunEMCC.java --help
 ```
 
 ```
@@ -75,12 +75,12 @@ Usage: <main class> [-hq] [--simpleOutput] [-d=<dataSize>] [-f=<datafile>]
 
 ### Experiments with the synthetic models
 
-As an example, let us consider the following command will run CEM with the quasi-markovian model `./models/synthetic/s1b_chain_twExo1_nEndo5_15.uai` with
+As an example, let us consider the following command will run EMCC with the quasi-markovian model `./models/synthetic/s1b_chain_twExo1_nEndo5_15.uai` with
 10 EM runs and a sample size of 1000. The endogenous variables considered for the PNS query are the first and the last one
 in the chain.
 
 ```
-java -cp lib/causalem.jar experiments/RunCEM.java --executions 10 --datasize 1000 --simpleOutput ./models/synthetic/s1b_chain_twExo1_nEndo5_15.uai
+java -cp lib/causalem.jar experiments/RunEMCC.java --executions 10 --datasize 1000 --simpleOutput ./models/synthetic/s1b_chain_twExo1_nEndo5_15.uai
 ```
 
 The output is:
@@ -116,167 +116,19 @@ results=dict(seed=0, markovian=False, innerPoints=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 Note that the last line is a Python sentence for creating a dictionary containing all the statistics from the execution.
 
 
-### Experiments with a real model
+## Creating a deliverable
 
-For the palliative care model considered in the experimentation, we also provide in the folder `./models/palliative_care/em/` the set of precise SCM obtained from
-different EM runs. These models can be merged for obtaining the resulting PNS intervals using the following command.
-
-```
-java -cp lib/causalem.jar experiments/MergePalliative.java
-```
-
-The generated output is:
+In order to create a deliverable JAR file with all the dependencies, run the following command.
 
 ```
-Read files
-./models/palliative_care/em/tr21_0.uai
-./models/palliative_care/em/tr20_0.uai
-./models/palliative_care/em/tr2_2.uai
-./models/palliative_care/em/tr0_2.uai
-./models/palliative_care/em/tr2_0.uai
-./models/palliative_care/em/tr23_0.uai
-./models/palliative_care/em/tr22_0.uai
-./models/palliative_care/em/tr3_4.uai
-./models/palliative_care/em/tr0_0.uai
-./models/palliative_care/em/tr12_0.uai
-./models/palliative_care/em/tr0_3.uai
-./models/palliative_care/em/tr10_0.uai
-./models/palliative_care/em/tr1_3.uai
-./models/palliative_care/em/tr3_1.uai
-./models/palliative_care/em/tr1_0.uai
-./models/palliative_care/em/tr2_4.uai
-./models/palliative_care/em/tr1_4.uai
-./models/palliative_care/em/tr3_2.uai
-./models/palliative_care/em/tr0_1.uai
-./models/palliative_care/em/tr2_1.uai
-./models/palliative_care/em/tr1_2.uai
-./models/palliative_care/em/tr1_1.uai
-./models/palliative_care/em/tr2_3.uai
-./models/palliative_care/em/tr3_3.uai
-./models/palliative_care/em/tr3_0.uai
-Number of EM models: 25
-numPoints,FAwareness_l,FAwareness_u,Triangolo_l,Triangolo_u,PAwareness_l,PAwareness_u
-1,0.08653785393304875,0.086537853933048751,0.30370612304988814,0.303706123049888141,0.0821475408279124,0.0821475408279124
-2,0.08653785393304875,0.090873073937490962,0.29717499346065257,0.303706123049888142,0.05095352039063187,0.0821475408279124
-3,0.08653785393304875,0.090873073937490963,0.29717499346065257,0.303706123049888143,0.05095352039063187,0.0878557657390133
-4,0.0669739552302614,0.090873073937490964,0.29717499346065257,0.303706123049888144,0.033693330013311,0.0878557657390133
-5,0.0669739552302614,0.090873073937490965,0.29717499346065257,0.303706123049888145,0.033693330013311,0.0878557657390133
-[...]
-14,0.054701177073378925,0.1013507304192107614,0.29717499346065257,0.311827362849678814,0.033693330013311,0.09665652257971483
-15,0.054701177073378925,0.1013507304192107615,0.29717499346065257,0.3128786208036083415,0.033693330013311,0.09665652257971483
+$ mvn clean package
 ```
 
+_Note: maven should be installed in the system_ 
 
-### Supplementary material example
 
-The example given in the supplementary material about M-incompatibility can be executed with the following command:
 
-```
-java -cp lib/causalem.jar example/suppmat.java
-```
+## Troublesshouting
 
-The generated output is the following.
+- When running a Java command, the error `Error: Could not find or load main class` means that the Java path is not correctly defined in your system.
 
-```
-Empirical from data: 
-f([0, 2])
--------------------------------
-f({2=0, 0=0}) = 0.478261
-f({2=0, 0=1}) = 0.521739
-f({2=1, 0=0}) = 0.753191
-f({2=1, 0=1}) = 0.246809
--------------------------------
-f([0, 1, 2])
--------------------------------
-f({2=0, 1=0, 0=0}) = 0.009091
-f({2=0, 1=0, 0=1}) = 0.108333
-f({2=0, 1=1, 0=0}) = 0.990909
-f({2=0, 1=1, 0=1}) = 0.891667
-f({2=1, 1=0, 0=0}) = 0.884181
-f({2=1, 1=0, 0=1}) = 0.982759
-f({2=1, 1=1, 0=0}) = 0.115819
-f({2=1, 1=1, 0=1}) = 0.017241
--------------------------------
-f([2])
--------------------------------
-f({2=0}) = 0.328571
-f({2=1}) = 0.671429
--------------------------------
-
-Exact method with the conservative model
-=========================================
-pn=K(vars[]|[])
-K(vars[]|[]) [0.0]
-             [0.02262204172807862]
-
-ps=K(vars[]|[])
-K(vars[]|[]) [0.0]
-             [0.028356736029998497]
-
-pns=K(vars[]|[])
-K(vars[]|[]) [0.0]
-             [0.014563146350000002]
-
-Inference based on CEM
-
-==========================
-pn=K(vars[]|[])
-K(vars[]|[]) [0.49630678990355714]
-
-ps=K(vars[]|[])
-K(vars[]|[]) [0.493495632782011]
-
-pns=K(vars[]|[])
-K(vars[]|[]) [0.31010895883777045]
-             [0.3101089588383747]
-
-P(U)
-f([3])
--------------------------------
-f({3=0}) = 0.677142857142856
-f({3=1}) = 2.8586258796500645E-15
-f({3=2}) = 0.3228571428571412
--------------------------------
-f([4])
--------------------------------
-f({4=0}) = 0.09051724137935803
-f({4=1}) = 5.548383845335044E-57
-f({4=2}) = 1.6937641227175157E-12
-f({4=3}) = 0.44761835183839016
-f({4=4}) = 8.72905861846859E-29
-f({4=5}) = 0.4618644067805581
--------------------------------
-f([5])
--------------------------------
-f({5=0}) = 0.32857142857142857
-f({5=1}) = 0.6714285714285714
--------------------------------
-Empirical from one of the learnt models: 
-f([0, 2])
--------------------------------
-f({2=0, 0=0}) = 0.323
-f({2=0, 0=1}) = 0.677
-f({2=1, 0=0}) = 0.677
-f({2=1, 0=1}) = 0.323
--------------------------------
-f([0, 1, 2])
--------------------------------
-f({2=0, 1=0, 0=0}) = 0.091
-f({2=0, 1=0, 0=1}) = 0.538
-f({2=0, 1=1, 0=0}) = 0.909
-f({2=0, 1=1, 0=1}) = 0.462
-f({2=1, 1=0, 0=0}) = 0.909
-f({2=1, 1=0, 0=1}) = 0.538
-f({2=1, 1=1, 0=0}) = 0.091
-f({2=1, 1=1, 0=1}) = 0.462
--------------------------------
-f([2])
--------------------------------
-f({2=0}) = 0.329
-f({2=1}) = 0.671
--------------------------------
-PNS by the precise model = P([]) [0.3101089588383747]
-Max LL the data = -2.724572333399319
-LL by this model and data = -3.806409293059741
-Ratio =  0.7157854354672408
-```
