@@ -7,7 +7,6 @@ The organisation  is the following:
 - _experiments_: Java files for replicating the experiments.
 - _lib_: packages needed for running the code.
 - _models_: set of structural causal models in UAI format considered in the experimentation.
-- _src_: sources files with implementing the proposed method and related functionality.
 - _pom.xml_: maven configuration file required for building a jar file with the sources.
 
 
